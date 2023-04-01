@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Beadwork
 {
-    interface Interface1
+    public interface IPictureRepository
     {
+        Picture[] GetAllByTitle(string titlePart);
     }
 }
