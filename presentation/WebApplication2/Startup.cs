@@ -1,4 +1,3 @@
-using Beadwork.Memory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Beadwork.Web
+namespace WebApplication2
 {
     public class Startup
     {
@@ -25,7 +24,6 @@ namespace Beadwork.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSingleton<IPictureRepository, PictureRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
