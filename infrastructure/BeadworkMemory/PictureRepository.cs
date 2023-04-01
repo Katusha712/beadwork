@@ -1,8 +1,22 @@
 ﻿using System;
+using System.Linq;
 
 namespace Beadwork.Memory
 {
-    public class PictureRepository 
+    public class PictureRepository : IPictureRepository
     {
+        private readonly Picture[] pictures = new[]
+        {
+            new Picture(1, "Крик"),
+            new Picture(2, "Зоряна ніч"),
+            new Picture(3, "Поцілунок"),
+
+        };
+
+        public Picture[] GetAllByTitle(string titlePart)
+        {
+            return pictures.Where(picture => picture.Title.Contains(titlePart))
+                            .ToArray();
+        }
     }
 }
