@@ -8,14 +8,14 @@ namespace Beadwork.Web.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly IPictureRepository pictureRepository;
-        public SearchController(IPictureRepository pictureRepository)
+        private readonly PictureService pictureService;
+        public SearchController(PictureService pictureService)
         {
-            this.pictureRepository = pictureRepository;
+            this.pictureService = pictureService;
         }
         public IActionResult Index(string query)
         {
-            var pictures = pictureRepository.GetAllByTitle(query);
+            var pictures = pictureService.GetAllByQuery(query);
 
             return View(pictures);
         }

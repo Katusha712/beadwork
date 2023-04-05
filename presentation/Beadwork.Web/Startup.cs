@@ -26,6 +26,7 @@ namespace Beadwork.Web
         {
             services.AddControllersWithViews();
             services.AddSingleton<IPictureRepository, PictureRepository>();
+            services.AddSingleton<PictureService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

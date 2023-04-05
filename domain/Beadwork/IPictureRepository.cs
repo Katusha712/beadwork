@@ -8,6 +8,7 @@ namespace Beadwork
 {
     public interface IPictureRepository
     {
-        Picture[] GetAllByTitle(string titlePart);
+        Picture[] GetAllByItemNumber(string item_number);
+        Picture[] GetAllByTitleOrAuthor(string titleOrAuthorPart);
     }
 }
