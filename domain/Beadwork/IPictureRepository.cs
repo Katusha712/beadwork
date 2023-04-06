@@ -10,5 +10,6 @@ namespace Beadwork
     {
         Picture[] GetAllByItemNumber(string item_number);
         Picture[] GetAllByTitleOrAuthor(string titleOrAuthorPart);
+        Picture GetById(int id);
     }
 }

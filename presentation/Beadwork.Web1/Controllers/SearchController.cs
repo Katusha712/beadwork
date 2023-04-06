@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Beadwork.Web.Controllers
+namespace Beadwork.Web1.Controllers
 {
     public class SearchController : Controller
     {
@@ -17,7 +17,7 @@ namespace Beadwork.Web.Controllers
         {
             var pictures = pictureService.GetAllByQuery(query);
 
-            return View("Index", pictures);
+            return View(pictures);
         }
     }
 }

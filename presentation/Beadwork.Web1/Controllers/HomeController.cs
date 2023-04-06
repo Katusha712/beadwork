@@ -1,4 +1,4 @@
-﻿using Beadwork.Web.Models;
+﻿using Beadwork.Web1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Beadwork.Web.Controllers
+namespace Beadwork.Web1.Controllers
 {
     public class HomeController : Controller
     {
@@ -19,6 +19,11 @@ namespace Beadwork.Web.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
         {
             return View();
         }

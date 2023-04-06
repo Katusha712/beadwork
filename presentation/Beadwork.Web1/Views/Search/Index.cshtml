@@ -1,10 +1,11 @@
-﻿@model Picture[]
+﻿@using Beadwork
+@model Picture[]
 
 @{
     ViewData["Title"] = "Результати пошуку";
 }
-
 <h1>Результати пошуку</h1>
+
 @if (Model.Length == 0)
 {
     <p>Нічого не знайдено</p>

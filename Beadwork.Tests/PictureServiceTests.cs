@@ -15,10 +15,10 @@ namespace Beadwork.Tests
         {
             var pictureRepositoryStub = new Mock<IPictureRepository>();
             pictureRepositoryStub.Setup(x => x.GetAllByItemNumber(It.IsAny<string>()))
-                                 .Returns(new[] { new Picture(1, "", "", "") });
+                                 .Returns(new[] { new Picture(1, "", "", "", "", 0m) });
 
             pictureRepositoryStub.Setup(x => x.GetAllByTitleOrAuthor(It.IsAny<string>()))
-                         .Returns(new[] { new Picture(2, "", "", "") });
+                         .Returns(new[] { new Picture(2, "", "", "", "", 0m) });
 
             var pictureService = new PictureService(pictureRepositoryStub.Object);
             var validItemNumber = "IN-45645672";
@@ -33,10 +33,10 @@ namespace Beadwork.Tests
         {
             var pictureRepositoryStub = new Mock<IPictureRepository>();
             pictureRepositoryStub.Setup(x => x.GetAllByItemNumber(It.IsAny<string>()))
-                                 .Returns(new[] { new Picture(1, "", "", "") });
+                                 .Returns(new[] { new Picture(1, "", "", "", "", 0m) });
 
             pictureRepositoryStub.Setup(x => x.GetAllByTitleOrAuthor(It.IsAny<string>()))
-                         .Returns(new[] { new Picture(2, "", "", "") });
+                         .Returns(new[] { new Picture(2, "", "", "", "", 0m) });
 
             var pictureService = new PictureService(pictureRepositoryStub.Object);
             var invalidItemNumber = "IN-4564562";
