@@ -55,5 +55,31 @@ namespace Beadwork.Tests
             Assert.Equal(3 * 10m + 5 * 100m, order.TotalPrice);
         }
 
+        [Fact]
+        public void GetItem_WithExistingItem_ReturnItem()
+        {
+            var order = new Order(1, new[]
+{
+                new OrderItem(1, 3, 10m),
+                new OrderItem(2, 5, 100m),
+            });
+
+            var orderItem = order.GetItem(1);
+
+            Assert.Equal(3, orderItem.Count);
+        }
+
+        [Fact]
+        public void GetItem_WithNonExistingItem_ThrowInvalidOperationException()
+        {
+            var order = new Order(1, new[]
+{
+                new OrderItem(1, 3, 10m),
+                new OrderItem(2, 5, 100m),
+            });
+
+            Assert.Throws<InvalidOperationException>(() => order.GetItem(100));
+        }
+
     }
 }

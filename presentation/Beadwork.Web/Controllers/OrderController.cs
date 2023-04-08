@@ -53,12 +53,10 @@ namespace Beadwork.Web.Controllers
             return View("Empty");
 
         }
-        public IActionResult AddItem(int id)
+        private (Order order, Cart cart) GetOrCreateOrderAndCart()
         {
             Order order;
-            Cart cart;
-
-            if (HttpContext.Session.TryGetCart(out cart))
+            if (HttpContext.Session.TryGetCart(out Cart cart))
             {
                 order = orderRepository.GetById(cart.OrderId);
             }
@@ -68,14 +66,52 @@ namespace Beadwork.Web.Controllers
                 cart = new Cart(order.Id);
             }
 
-            var picture = pictureRepository.GetById(id);
-            order.AddItem(picture, 1);
+            return (order, cart);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateItem(int pictureId, int count)
+        {
+            (Order order, Cart cart) = GetOrCreateOrderAndCart();
+
+            order.GetItem(pictureId).Count = count ;
+
+            SaveOrderAndCart(order, cart);
+
+            return RedirectToAction("Index", "Picture", new { pictureId });
+        }
+
+        private void SaveOrderAndCart(Order order, Cart cart)
+        {
             orderRepository.Update(order);
 
             cart.TotalCount = order.TotalCount;
             cart.TotalPrice = order.TotalPrice;
 
             HttpContext.Session.Set(cart);
+        }
+
+        public IActionResult AddItem(int pictureId, int count)
+        {
+            (Order order, Cart cart) = GetOrCreateOrderAndCart();
+
+            var picture = pictureRepository.GetById(pictureId);
+
+            order.AddOrUpdateItem(picture, count);
+
+            SaveOrderAndCart(order, cart);
+
+            return RedirectToAction("Index", "Picture", new { pictureId });
+
+        }
+
+        public IActionResult RemoveItem(int id)
+        {
+            (Order order, Cart cart) = GetOrCreateOrderAndCart();
+
+            order.RemoveItem(id);
+
+            SaveOrderAndCart(order, cart);
 
             return RedirectToAction("Index", "Picture", new { id });
         }

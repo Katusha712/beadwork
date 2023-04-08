@@ -16,15 +16,9 @@ namespace Beadwork
             get { return items; }
         }
 
-        public int TotalCount
-        {
-            get { return items.Sum(item => item.Count); }
-        }
+        public int TotalCount => items.Sum(item => item.Count);
 
-        public decimal TotalPrice
-        {
-            get { return items.Sum(item => item.Price * item.Count); }
-        }
+        public decimal TotalPrice => items.Sum(item => item.Price * item.Count);
 
 
         public Order(int id, IEnumerable<OrderItem> items)
@@ -37,22 +31,44 @@ namespace Beadwork
             this.items = new List<OrderItem>(items);
         }
 
-        public void AddItem(Picture picture, int count)
+        public OrderItem GetItem(int pictureId)
+        {
+            int index = items.FindIndex(item => item.PictureId == pictureId);
+
+            if (index == -1)
+                ThrowPictureException("Picture not found.", pictureId);
+
+            return items[index];
+        }
+
+        public void AddOrUpdateItem(Picture picture, int count)
         {
             if (picture == null)
                 throw new ArgumentNullException(nameof(picture));
 
-            var item = items.SingleOrDefault(x => x.PictureId == picture.Id);
-
-            if(item == null)
-            {
+            int index = items.FindIndex(item => item.PictureId == picture.Id);
+            if(index == -1)
                 items.Add(new OrderItem(picture.Id, count, picture.Price));
-            }
             else
-            {
-                items.Remove(item);
-                items.Add(new OrderItem(picture.Id, item.Count + count, picture.Price));
-            }
+                items[index].Count += count;
+        }
+
+        public void RemoveItem(int pictureId)
+        {
+            int index = items.FindIndex(item => item.PictureId==pictureId);
+
+            if(index ==-1)
+                ThrowPictureException("Order does not contain specified item.", pictureId);
+
+            items.RemoveAt(index);
+        }
+
+        private void  ThrowPictureException(string message, int pictureId)
+        {
+            var exception = new InvalidOperationException(message);
+            exception.Data["PictureId"] = pictureId;
+
+            throw exception;
         }
     }
 }
