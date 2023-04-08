@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Beadwork.Memory
@@ -18,6 +19,16 @@ namespace Beadwork.Memory
             new Picture(5, "Леонардо да Вінчі","IN-45798632", "Пані з горностаєм",
                 "Пані з горностаєм — жіночий портрет пензля італійського художника Леонардо да Вінчі, написаний близько 1489—1490 років. На думку багатьох дослідників, зображує Цецилії Галлерані і написаний в період, коли вона була коханкою міланського герцога Людовіко Сфорца, а Леонардо був у герцога на службі.",700m),
         };
+
+        public Picture[] GetAllByIds(IEnumerable<int> pictureIds)
+        {
+            var foundPictures = from picture in pictures
+                                join pictureId in pictureIds on picture.Id equals pictureId
+                                select picture;
+
+            return foundPictures.ToArray();
+        }
+
         public Picture[] GetAllByItemNumber(string item_number)
         {
             return pictures.Where(picture => picture.Item_number == item_number)
