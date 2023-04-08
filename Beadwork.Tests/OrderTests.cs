@@ -73,12 +73,68 @@ namespace Beadwork.Tests
         public void GetItem_WithNonExistingItem_ThrowInvalidOperationException()
         {
             var order = new Order(1, new[]
-{
+            {
                 new OrderItem(1, 3, 10m),
                 new OrderItem(2, 5, 100m),
             });
 
             Assert.Throws<InvalidOperationException>(() => order.GetItem(100));
+        }
+
+        [Fact]
+        public void AddOrUpdateItem_WithExistingItem_UpdatesCount()
+        {
+            var order = new Order(1, new[]
+            {
+                new OrderItem(1, 3, 10m),
+                new OrderItem(2, 5, 100m),
+            });
+
+            var picture = new Picture(1, null, null, null, null, 0m);
+            order.AddOrUpdateItem(picture, 10);
+
+            Assert.Equal(13, order.GetItem(1).Count);
+        }
+
+        [Fact]
+        public void AddOrUpdateItem_WithNonExistingItem_AddsCount()
+        {
+            var order = new Order(1, new[]
+            {
+                new OrderItem(1, 3, 10m),
+                new OrderItem(2, 5, 100m),
+            });
+
+            var picture = new Picture(4, null, null, null, null, 0m);
+            order.AddOrUpdateItem(picture, 10);
+
+            Assert.Equal(10, order.GetItem(4).Count);
+
+        }
+
+        public void RemoveItem_WithExistingItem_RemovesItem()
+        {
+            var order = new Order(1, new[]
+{
+                new OrderItem(1, 3, 10m),
+                new OrderItem(2, 5, 100m),
+            });
+
+            order.RemoveItem(1);
+
+            Assert.Equal(1, order.Items.Count);
+        }
+
+        [Fact]
+        public void RemoveItem_WithNonExistingItem_ThrowInvalidOperationException()
+        {
+            var order = new Order(1, new[]
+            {
+                new OrderItem(1, 3, 10m),
+                new OrderItem(2, 5, 100m),
+            });
+
+            Assert.Throws<InvalidOperationException>(() => order.RemoveItem(100));
         }
 
     }

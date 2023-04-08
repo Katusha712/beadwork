@@ -78,7 +78,7 @@ namespace Beadwork.Web.Controllers
 
             SaveOrderAndCart(order, cart);
 
-            return RedirectToAction("Index", "Picture", new { pictureId });
+            return RedirectToAction("Index", "Order");
         }
 
         private void SaveOrderAndCart(Order order, Cart cart)
@@ -91,7 +91,7 @@ namespace Beadwork.Web.Controllers
             HttpContext.Session.Set(cart);
         }
 
-        public IActionResult AddItem(int pictureId, int count)
+        public IActionResult AddItem(int pictureId, int count = 1)
         {
             (Order order, Cart cart) = GetOrCreateOrderAndCart();
 
@@ -101,19 +101,19 @@ namespace Beadwork.Web.Controllers
 
             SaveOrderAndCart(order, cart);
 
-            return RedirectToAction("Index", "Picture", new { pictureId });
+            return RedirectToAction("Index", "Picture", new { id = pictureId });
 
         }
 
-        public IActionResult RemoveItem(int id)
+        public IActionResult RemoveItem(int pictureId)
         {
             (Order order, Cart cart) = GetOrCreateOrderAndCart();
 
-            order.RemoveItem(id);
+            order.RemoveItem(pictureId);
 
             SaveOrderAndCart(order, cart);
 
-            return RedirectToAction("Index", "Picture", new { id });
+            return RedirectToAction("Index", "Order");
         }
     }
 }
