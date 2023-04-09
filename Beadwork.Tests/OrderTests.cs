@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Beadwork.Tests
@@ -111,7 +107,7 @@ namespace Beadwork.Tests
             Assert.Equal(10, order.GetItem(4).Count);
 
         }
-
+        [Fact]
         public void RemoveItem_WithExistingItem_RemovesItem()
         {
             var order = new Order(1, new[]

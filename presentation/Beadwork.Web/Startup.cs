@@ -1,14 +1,12 @@
+using Beadwork.Contractors;
 using Beadwork.Memory;
+using Beadwork.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Beadwork.Web
 {
@@ -35,6 +33,8 @@ namespace Beadwork.Web
 
             services.AddSingleton<IPictureRepository, PictureRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
+            services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
+            services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<PictureService>();
 
         }

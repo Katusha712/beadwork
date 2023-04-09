@@ -1,9 +1,11 @@
-﻿using Beadwork.Web.Models;
+﻿using Beadwork.Contractors;
+using Beadwork.Messages;
+using Beadwork.Web.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Beadwork.Web.Controllers
 {
@@ -11,12 +13,21 @@ namespace Beadwork.Web.Controllers
     {
         private readonly IPictureRepository pictureRepository;
         private readonly IOrderRepository orderRepository;
+        private readonly IEnumerable<IDeliveryService> deliveryServices;
+        private readonly INotificationService notificationService;
+
         public OrderController(IPictureRepository pictureRepository,
-                              IOrderRepository orderRepository)
+                              IOrderRepository orderRepository,
+                              IEnumerable<IDeliveryService> deliveryServices,
+                              INotificationService notificationService)
         {
             this.pictureRepository = pictureRepository;
             this.orderRepository = orderRepository;
+            this.deliveryServices = deliveryServices;
+            this.notificationService = notificationService;
         }
+
+
 
         private OrderModel Map(Order order)
         {
@@ -40,6 +51,8 @@ namespace Beadwork.Web.Controllers
                 TotalPrice = order.TotalPrice,
             };
         }
+
+        [HttpGet]
         public IActionResult Index()
         {
             if (HttpContext.Session.TryGetCart(out Cart cart))
@@ -91,6 +104,7 @@ namespace Beadwork.Web.Controllers
             HttpContext.Session.Set(cart);
         }
 
+        [HttpPost]
         public IActionResult AddItem(int pictureId, int count = 1)
         {
             (Order order, Cart cart) = GetOrCreateOrderAndCart();
@@ -105,6 +119,7 @@ namespace Beadwork.Web.Controllers
 
         }
 
+        [HttpPost]
         public IActionResult RemoveItem(int pictureId)
         {
             (Order order, Cart cart) = GetOrCreateOrderAndCart();
@@ -114,6 +129,110 @@ namespace Beadwork.Web.Controllers
             SaveOrderAndCart(order, cart);
 
             return RedirectToAction("Index", "Order");
+        }
+
+        [HttpPost]
+        public IActionResult SendConfirmationCode(int id, string cellPhone)
+        {
+            var order = orderRepository.GetById(id);
+            var model = Map(order);
+
+            if (!IsValidCellPhone(cellPhone))
+            {
+                model.Errors["cellPhone"] = "Номер телефону не дійсний.";
+                return View("Index", model);
+            }
+
+            int code = 1111; //random.Next(1000,10000)
+            HttpContext.Session.SetInt32(cellPhone, code);
+            notificationService.SendConfirmationCode(cellPhone, code);
+
+            return View("Confirmation", new ConfirmationModel
+            {
+                CellPhone = cellPhone,
+                OrderId = id,
+            }); 
+
+        }
+        private bool IsValidCellPhone(string cellPhone)
+        {
+            if (cellPhone == null)
+                return false;
+
+            cellPhone = cellPhone.Replace(" ", "")
+                                 .Replace("-", "");
+
+            return Regex.IsMatch(cellPhone, @"^\+?\d{12}$");
+        }
+
+        [HttpPost]
+        public IActionResult Confirmate(int id, string cellPhone, int code)
+        {
+            int? storedCode = HttpContext.Session.GetInt32(cellPhone);
+            if(storedCode == null)
+            {
+                return View("Confirmation", new ConfirmationModel
+                {
+                    CellPhone = cellPhone,
+                    OrderId = id,
+                    Errors = new Dictionary<string, string>
+                {
+                    { "code", "Порожнє поле для вводу коду, повторіть відправку." }
+                },
+                }); ;
+            }
+
+            code = 1111; //random.Next(1000,10000) ????????
+
+            if (storedCode != code)
+            {
+                return View("Confirmation", new ConfirmationModel
+                {
+                    CellPhone = cellPhone,
+                    OrderId = id,
+                    Errors = new Dictionary<string, string>
+                {
+                    { "code", "Код невірний." }
+                },
+                }); ;
+
+            }
+            // to do: сохранить CellPhone
+
+            HttpContext.Session.Remove(cellPhone);
+
+            var model = new DeliveryModel
+            {
+                OrderId = id,
+                Methods = deliveryServices.ToDictionary(service => service.UniqueCode,
+                                                        service => service.Title),
+            };
+                
+            return View("DelivetyMethod", model);
+        }
+
+        [HttpPost]
+        public IActionResult StartDelivery(int id, string uniqueCode)
+        {
+            var deliveryService = deliveryServices.Single(service => service.UniqueCode == uniqueCode);
+            var order = orderRepository.GetById(id);
+
+            var form = deliveryService.CreateForm(order);
+
+            return View("DeliveryStep", form);
+        }
+
+        [HttpPost]
+        public IActionResult NextDelivery(int id, string uniqueCode, int step, Dictionary<string,string> values)
+        {
+            var deliveryService = deliveryServices.Single(service => service.UniqueCode == uniqueCode);
+
+            var form = deliveryService.MoveNext(id, step, values);
+
+            if (form.IsFinal)
+                return null;
+
+            return View("DeliveryStep", form);
         }
     }
 }
