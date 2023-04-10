@@ -34,6 +34,7 @@ namespace Beadwork.Web
             services.AddSingleton<IPictureRepository, PictureRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
+            services.AddSingleton<IPaymentService, CashPaymentService>();
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<PictureService>();
 
