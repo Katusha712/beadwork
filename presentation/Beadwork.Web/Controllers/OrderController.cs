@@ -1,5 +1,6 @@
 ﻿using Beadwork.Contractors;
 using Beadwork.Messages;
+using Beadwork.Web.Contractors;
 using Beadwork.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +17,20 @@ namespace Beadwork.Web.Controllers
         private readonly IEnumerable<IDeliveryService> deliveryServices;
         private readonly IEnumerable<IPaymentService> paymentServices;
         private readonly INotificationService notificationService;
+        private readonly IEnumerable<IWebContractorService> webContractorServices;
 
         public OrderController(IPictureRepository pictureRepository,
                               IOrderRepository orderRepository,
                               IEnumerable<IDeliveryService> deliveryServices,
                               IEnumerable<IPaymentService> paymentServices,
+                              IEnumerable<IWebContractorService> webContractorServices,
                               INotificationService notificationService)
         {
             this.pictureRepository = pictureRepository;
             this.orderRepository = orderRepository;
             this.deliveryServices = deliveryServices;
             this.paymentServices = paymentServices;
+            this.webContractorServices = webContractorServices;
             this.notificationService = notificationService;
         }
 
@@ -260,6 +264,11 @@ namespace Beadwork.Web.Controllers
 
             var form = paymentService.CreateForm(order);
 
+            var webContractorService = webContractorServices.SingleOrDefault(service => service.UniqueCode == uniqueCode);
+
+            if (webContractorService != null)
+                return Redirect(webContractorService.GetUri);
+
             return View("PaymentStep", form);
         }
 
@@ -280,6 +289,13 @@ namespace Beadwork.Web.Controllers
             }
 
             return View("PaymentStep", form);
+        }
+
+        public IActionResult Finish()
+        {
+            HttpContext.Session.RemoveCart();
+
+            return View();
         }
 
     }

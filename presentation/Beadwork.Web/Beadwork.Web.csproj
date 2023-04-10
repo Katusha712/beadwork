@@ -10,8 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Beadwork.Web.Contractors\Beadwork.Web.Contractors.csproj" />
     <ProjectReference Include="..\..\domain\Beadwork\Beadwork.csproj" />
     <ProjectReference Include="..\..\infrastructure\BeadworkMemory\Beadwork.Memory.csproj" />
+    <ProjectReference Include="..\..\plugins\Beadwork.Privat\Beadwork.Privat.csproj" />
   </ItemGroup>
 
   <ItemGroup>

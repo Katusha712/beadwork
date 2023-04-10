@@ -1,6 +1,8 @@
 using Beadwork.Contractors;
 using Beadwork.Memory;
 using Beadwork.Messages;
+using Beadwork.Privat;
+using Beadwork.Web.Contractors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +39,8 @@ namespace Beadwork.Web
             services.AddSingleton<IPaymentService, CashPaymentService>();
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<PictureService>();
-
+            services.AddSingleton<IPaymentService, PrivatPaymentService>();
+            services.AddSingleton<IWebContractorService, PrivatPaymentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +70,11 @@ namespace Beadwork.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            endpoints.MapAreaControllerRoute(
+                name: "privat",
+                areaName: "Privat",
+                pattern: "Privat/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
