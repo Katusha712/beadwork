@@ -1,17 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Beadwork.Privat.Areas.Privat.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Beadwork.Privat.Areas.Privat.Controllers
 {
     [Area("Privat")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int orderId, string returnUri)
         {
-            return View();
+            var model = new ExampleModel
+            {
+                OrderId = orderId,
+                ReturnUri = returnUri,
+            };
+
+            return View(model);
         }
-        public IActionResult Callback()
+        public IActionResult Callback(int orderId, string returnUri)
         {
-            return View();
+            var model = new ExampleModel
+            {
+                OrderId = orderId,
+                ReturnUri = returnUri,
+            };
+
+            return View(model);
         }
     }
 }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Beadwork.Contractors
 {
     public interface IDeliveryService
     {
-        string UniqueCode { get; }
+        string Name { get; }
         string Title { get; }
-        Form CreateForm(Order order);
-        Form MoveNextForm(int orderId, int step, IReadOnlyDictionary<string, string> values);
+        Form FirstForm(Order order);
+        Form NextForm( int step, IReadOnlyDictionary<string, string> values);
         OrderDelivery GetDelivery(Form form);
     }
 }

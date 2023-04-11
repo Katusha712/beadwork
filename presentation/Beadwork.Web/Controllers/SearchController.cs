@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Beadwork.Web.App;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Beadwork.Web.Controllers
 {

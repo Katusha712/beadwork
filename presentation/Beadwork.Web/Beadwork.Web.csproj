@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\application\Beadwork.Web.App\Beadwork.Web.App.csproj" />
     <ProjectReference Include="..\..\Beadwork.Web.Contractors\Beadwork.Web.Contractors.csproj" />
     <ProjectReference Include="..\..\domain\Beadwork\Beadwork.csproj" />
     <ProjectReference Include="..\..\infrastructure\BeadworkMemory\Beadwork.Memory.csproj" />

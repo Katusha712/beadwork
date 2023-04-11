@@ -2,6 +2,7 @@ using Beadwork.Contractors;
 using Beadwork.Memory;
 using Beadwork.Messages;
 using Beadwork.Privat;
+using Beadwork.Web.App;
 using Beadwork.Web.Contractors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +26,7 @@ namespace Beadwork.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -39,6 +41,7 @@ namespace Beadwork.Web
             services.AddSingleton<IPaymentService, CashPaymentService>();
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<PictureService>();
+            services.AddSingleton<OrderService>();
             services.AddSingleton<IPaymentService, PrivatPaymentService>();
             services.AddSingleton<IWebContractorService, PrivatPaymentService>();
         }
@@ -68,13 +71,12 @@ namespace Beadwork.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "areas", 
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            endpoints.MapAreaControllerRoute(
-                name: "privat",
-                areaName: "Privat",
-                pattern: "Privat/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

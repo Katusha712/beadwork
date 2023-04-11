@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Beadwork.Web.Models
+namespace Beadwork.Web.App
 {
     public class OrderItemModel
     {

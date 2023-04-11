@@ -6,7 +6,7 @@ namespace Beadwork
     public class Picture
     {
         public int Id { get; }
-        public string Item_number { get; }
+        public string ItemNumber { get; }
         public string Author { get; }
         public string Title { get; }
         public string Description { get; }
@@ -16,12 +16,12 @@ namespace Beadwork
         {
             Id = id;
             Author = author;
-            Item_number = item_number;
+            ItemNumber = item_number;
             Title = title;
             Description = description;
             Price = price;
         }
-        internal static bool IsItemNumber(string s)
+        public static bool IsItemNumber(string s)
         {
             if (s == null)
                 return false;

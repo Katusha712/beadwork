@@ -16,7 +16,7 @@ namespace Beadwork
             }
         }
         public decimal Price { get; }
-        public OrderItem(int pictureId, int count, decimal price)
+        public OrderItem(int pictureId, decimal price, int count)
         {
             ThrowIfInvalidCount(count);
 

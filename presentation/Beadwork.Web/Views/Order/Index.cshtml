@@ -43,11 +43,15 @@
     </tfoot>
 </table>
 
-        <form action="@Url.Action("SendConfirmationCode")" method="post">
-            <input type="hidden" name="id" value="@Model.Id" />
+<p>
+    Для оформлення замовлення необхідно підтвердити номер Вашого мобільного телефону.
+    Введіть номер і натисніть <em>Відправити код</em>. На ваш номер буде надіслано *код*.
+</p>
+
+        <form action="@Url.Action(nameof(OrderController.SendConfirmationCode))" method="post">
             <div class="form-group">
                 <label for="cellPhone">Мобільний телефон</label>
-                <input type="text" class="form-control" name="cellPhone" value="+380509891220" />
+                <input type="text" class="form-control" name="cellPhone" placeholder="+380509891220" value="+380509891220"/>
                 @if (Model.Errors.ContainsKey("cellPhone"))
                 {
                     <small class="form-text text-danger">@Model.Errors["cellPhone"]</small>

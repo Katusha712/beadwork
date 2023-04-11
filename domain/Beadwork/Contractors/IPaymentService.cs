@@ -8,10 +8,10 @@ namespace Beadwork.Contractors
 {
     public interface IPaymentService
     {
-        string UniqueCode { get; }
+        string Name { get; }
         string Title { get; }
-        Form CreateForm(Order order);
-        Form MoveNextForm(int orderId, int step, IReadOnlyDictionary<string, string> values);
+        Form FirstForm(Order order);
+        Form NextForm( int step, IReadOnlyDictionary<string, string> values);
         OrderPayment GetPayment(Form form);
     }
 }

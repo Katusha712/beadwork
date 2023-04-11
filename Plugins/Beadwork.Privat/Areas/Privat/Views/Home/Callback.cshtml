@@ -1,8 +1,17 @@
-﻿@{
+﻿@using Beadwork.Privat.Areas.Privat.Models
+@model ExampleModel 
+
+@{
     ViewData["Title"] = "Замовлення сплачене";
 }
 <h1>Замовлення сплачено</h1>
 
 <p>
-    <a href="@Url.Action("Finish", "Order")">Повернутися до магазину</a>
+    Замовлення сплачено.Щоб завершити оформлення, натисніть кнопку <em>Далі</em>
 </p>
+<form action="@Model.ReturnUri" method="post">
+    <input type="hidden" name="serviceName" value="Privat" />
+    <input type="hidden" name="step" value="1" />
+    <input type="hidden" name="values[orderId]" value="@Model.OrderId" />
+    <button type="submit" class="btn btn-success">Далі</button>
+</form>

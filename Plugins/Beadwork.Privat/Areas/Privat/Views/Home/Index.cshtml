@@ -1,8 +1,18 @@
-﻿@{
+﻿@using Beadwork.Privat.Areas.Privat.Models
+@using Beadwork.Privat.Areas.Privat.Controllers
+@model ExampleModel 
+
+@{
     ViewData["Title"] = "Приват";
 }
 <h1>Приват</h1>
 
 <p>
-    <a href="/Privat/Home/Callback">Сплатити</a>
+    Тут ми емулюємо редірект на зовнішню службу Привату. В початковому коді проекту можно подивитися, як передаються параметри.
 </p>
+
+<form action="@Url.Action(nameof(HomeController.Callback), "Home", new { area = "Privat" })" method="post">
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <input type="hidden" name="returnUri" value="@Model.ReturnUri" />
+    <button type="submit" class="btn btn-success">Сплатити</button>
+</form>

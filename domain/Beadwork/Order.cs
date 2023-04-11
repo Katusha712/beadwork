@@ -8,61 +8,21 @@ namespace Beadwork
     {
         public int Id { get; }
 
-        private List<OrderItem> items;
-        public IReadOnlyCollection<OrderItem> Items
-        {
-            get { return items; }
-        }
+        public OrderItemCollection Items { get; }
         public string CellPhone { get; set; }
         public OrderDelivery Delivery { get; set; }
         public OrderPayment Payment { get; set; }
 
-        public int TotalCount => items.Sum(item => item.Count);
+        public int TotalCount => Items.Sum(item => item.Count);
 
-        public decimal TotalPrice => items.Sum(item => item.Price * item.Count) 
+        public decimal TotalPrice => Items.Sum(item => item.Price * item.Count) 
                                    + (Delivery?.Amount ?? 0m);
 
 
         public Order(int id, IEnumerable<OrderItem> items)
         {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items));
-
             Id = id;
-
-            this.items = new List<OrderItem>(items);
-        }
-
-        public OrderItem GetItem(int pictureId)
-        {
-            int index = items.FindIndex(item => item.PictureId == pictureId);
-
-            if (index == -1)
-                ThrowPictureException("Picture not found.", pictureId);
-
-            return items[index];
-        }
-
-        public void AddOrUpdateItem(Picture picture, int count)
-        {
-            if (picture == null)
-                throw new ArgumentNullException(nameof(picture));
-
-            int index = items.FindIndex(item => item.PictureId == picture.Id);
-            if(index == -1)
-                items.Add(new OrderItem(picture.Id, count, picture.Price));
-            else
-                items[index].Count += count;
-        }
-
-        public void RemoveItem(int pictureId)
-        {
-            int index = items.FindIndex(item => item.PictureId==pictureId);
-
-            if(index ==-1)
-                ThrowPictureException("Order does not contain specified item.", pictureId);
-
-            items.RemoveAt(index);
+            Items = new OrderItemCollection(items);
         }
 
         private void  ThrowPictureException(string message, int pictureId)

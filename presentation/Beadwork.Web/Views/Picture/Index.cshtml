@@ -1,4 +1,6 @@
-﻿@model Picture
+﻿@using Beadwork.Web.App 
+@using Beadwork.Web.Controllers
+@model PictureModel
 
 @{
     ViewData["Title"] = Model.Title;
@@ -8,7 +10,7 @@
 <p><strong>@Model.Author</strong></p>
 <p>@Model.Description</p>
 <p>Ціна <strong>@Model.Price</strong></p>
-<form action="@Url.Action("AddItem", "Order")" method="post">
+<form action="@Url.Action(nameof(OrderController.AddItem), "Order")" method="post">
     <input type="hidden" name="pictureId" value="@Model.Id" />
     <button class=" btn btn-success" type ="submit">В кошик</button>
 </form>

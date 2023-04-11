@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Beadwork.Web.Models;
 using System.IO;
 using System.Text;
 
-namespace Beadwork.Web
+namespace Beadwork.Web.App
 {
     public static class SessionExtensions
     {
@@ -39,11 +38,7 @@ namespace Beadwork.Web
                     var orderId = reader.ReadInt32();
                     var totalCount = reader.ReadInt32();
                     var totalPrice = reader.ReadDecimal();
-                    value = new Cart(orderId)
-                    {
-                        TotalCount = totalCount,
-                        TotalPrice = totalPrice,
-                    };
+                    value = new Cart(orderId, totalCount, totalPrice);
                         
                     return true;
                 }

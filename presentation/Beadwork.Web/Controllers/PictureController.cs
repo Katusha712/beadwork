@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Beadwork.Web.App;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Beadwork.Web.Controllers
 {
     public class PictureController : Controller
     {
-        private readonly IPictureRepository pictureRepository;
-        public PictureController(IPictureRepository pictureRepository)
+        private readonly PictureService pictureService;
+        public PictureController(PictureService pictureService)
         {
-            this.pictureRepository = pictureRepository;
+            this.pictureService = pictureService;
         }
         public IActionResult Index(int id)
         {
-            Picture picture = pictureRepository.GetById(id);
+            var model = pictureService.GetById(id);
 
-            return View(picture);
+            return View(model);
         }
     }
 }

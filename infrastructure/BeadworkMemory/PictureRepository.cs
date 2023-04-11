@@ -30,7 +30,7 @@ namespace Beadwork.Memory
 
         public Picture[] GetAllByItemNumber(string item_number)
         {
-            return pictures.Where(picture => picture.Item_number == item_number)
+            return pictures.Where(picture => picture.ItemNumber == item_number)
                            .ToArray();
         }
         public Picture[] GetAllByTitleOrAuthor(string query)
